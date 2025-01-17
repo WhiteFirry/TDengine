@@ -1759,13 +1759,18 @@ _return:
   return code;
 }
 
-static int32_t createVirtualTableScanPhysiNode(SPhysiPlanContext* pCxt, SNodeList* pChildren,
+static int32_t createVirtualTableScanPhysiNode(SPhysiPlanContext* pCxt, SSubplan* pSubplan, SNodeList* pChildren,
                                                SVirtualScanLogicNode * pScanLogicNode, SPhysiNode** pPhyNode) {
   int32_t                 code = TSDB_CODE_SUCCESS;
   SVirtualScanPhysiNode * pVirtualScan =
       (SVirtualScanPhysiNode*)makePhysiNode(pCxt, (SLogicNode*)pScanLogicNode, QUERY_NODE_PHYSICAL_PLAN_VIRTUAL_TABLE_SCAN);
   if (NULL == pVirtualScan) {
     return terrno;
+  }
+
+  if (pScanLogicNode->pVgroupList) {
+    vgroupInfoToNodeAddr(pScanLogicNode->pVgroupList->vgroups, &pSubplan->execNode);
+    pSubplan->execNodeStat.tableNum = pScanLogicNode->pVgroupList->vgroups[0].numOfTable;
   }
 
   PLAN_ERR_RET(createVirtualTableScanPhysiNodeFinalize(pCxt, pChildren, pScanLogicNode, (SVirtualScanPhysiNode*)pVirtualScan, pPhyNode));
@@ -2983,7 +2988,7 @@ static int32_t doCreatePhysiNode(SPhysiPlanContext* pCxt, SLogicNode* pLogicNode
     case QUERY_NODE_LOGIC_PLAN_DYN_QUERY_CTRL:
       return createDynQueryCtrlPhysiNode(pCxt, pChildren, (SDynQueryCtrlLogicNode*)pLogicNode, pPhyNode);
     case QUERY_NODE_LOGIC_PLAN_VIRTUAL_TABLE_SCAN:
-      return createVirtualTableScanPhysiNode(pCxt, pChildren, (SVirtualScanLogicNode*)pLogicNode, pPhyNode);
+      return createVirtualTableScanPhysiNode(pCxt, pSubplan, pChildren, (SVirtualScanLogicNode*)pLogicNode, pPhyNode);
     default:
       break;
   }
