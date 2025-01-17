@@ -199,12 +199,17 @@ class TDTestCase(TBase):
     def test_select_virtual_normal_table(self):
 
         self.test_normal_query("test_vtable_select_test_projection")
+        self.test_normal_query("test_vtable_select_test_projection_filter")
+        self.test_normal_query("test_vtable_select_test_function")
+
+        self.test_normal_query("test_vtable_select_test_partition")
 
     def run(self):
         tdLog.debug(f"start to excute {__file__}")
 
         self.prepare_org_tables()
         self.test_select_virtual_normal_table()
+
 
         tdLog.success(f"{__file__} successfully executed")
 

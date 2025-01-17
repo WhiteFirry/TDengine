@@ -247,10 +247,10 @@ int32_t virtualTableGetNext(SOperatorInfo* pOperator, SSDataBlock** pResBlock) {
   SVirtualTableScanInfo*         pSortMergeInfo = &pInfo->virtualScanInfo;
   SExecTaskInfo*                 pTaskInfo = pOperator->pTaskInfo;
 
-  VTS_ERR_RET(pOperator->fpSet._openFn(pOperator));
+  VTS_ERR_JRET(pOperator->fpSet._openFn(pOperator));
 
   while(1) {
-    VTS_ERR_RET(doVirtualTableMerge(pOperator, pResBlock));
+    VTS_ERR_JRET(doVirtualTableMerge(pOperator, pResBlock));
     if (*pResBlock == NULL) {
       setOperatorCompleted(pOperator);
       break;
@@ -259,8 +259,8 @@ int32_t virtualTableGetNext(SOperatorInfo* pOperator, SSDataBlock** pResBlock) {
     QUERY_CHECK_NULL(tbInfo, code, lino, _return, terrno);
     (*pResBlock)->info.id.uid = tbInfo->uid;
 
-    VTS_ERR_RET(doSetTagColumnData(&pSortMergeInfo->base, (*pResBlock), pTaskInfo, (*pResBlock)->info.rows));
-    VTS_ERR_RET(doFilter(*pResBlock, pOperator->exprSupp.pFilterInfo, NULL));
+    VTS_ERR_JRET(doSetTagColumnData(&pSortMergeInfo->base, (*pResBlock), pTaskInfo, (*pResBlock)->info.rows));
+    VTS_ERR_JRET(doFilter(*pResBlock, pOperator->exprSupp.pFilterInfo, NULL));
     if ((*pResBlock)->info.rows > 0) {
       break;
     }
@@ -268,6 +268,11 @@ int32_t virtualTableGetNext(SOperatorInfo* pOperator, SSDataBlock** pResBlock) {
 
   return TSDB_CODE_SUCCESS;
 _return:
+  if (code != TSDB_CODE_SUCCESS) {
+    qError("%s failed at line %d since %s", __func__, lino, tstrerror(code));
+    pTaskInfo->code = code;
+    T_LONG_JMP(pTaskInfo->env, code);
+  }
   return code;
 }
 
