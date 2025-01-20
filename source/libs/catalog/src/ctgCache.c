@@ -3598,10 +3598,16 @@ int32_t ctgGetTbMetasFromCache(SCatalog *pCtg, SRequestConnInfo *pConn, SCtgTbMe
     }
 
     int32_t metaSize = sizeof(SCTableMeta);
+    int32_t colRefSize = 0;
+
     pTableMeta = taosMemoryCalloc(1, metaSize);
     if (NULL == pTableMeta) {
       ctgReleaseTbMetaToCache(pCtg, dbCache, pCache);
       CTG_ERR_RET(terrno);
+    }
+
+    if (tbMeta->colRef != NULL) {
+      colRefSize = tbMeta->numOfColRefs * sizeof(SColRef);
     }
 
     TAOS_MEMCPY(pTableMeta, tbMeta, metaSize);
@@ -3680,12 +3686,8 @@ int32_t ctgGetTbMetasFromCache(SCatalog *pCtg, SRequestConnInfo *pConn, SCtgTbMe
     }
 
     int32_t schemaExtSize = 0;
-    int32_t colRefSize = 0;
     if (stbMeta->schemaExt != NULL) {
       schemaExtSize = stbMeta->tableInfo.numOfColumns * sizeof(SSchemaExt);
-    }
-    if (tbMeta->colRef != NULL) {
-      colRefSize = tbMeta->numOfColRefs * sizeof(SColRef);
     }
     metaSize = CTG_META_SIZE(stbMeta);
     pTableMeta = taosMemoryRealloc(pTableMeta, metaSize + schemaExtSize + colRefSize);
