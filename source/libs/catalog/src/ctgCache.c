@@ -2492,6 +2492,7 @@ int32_t ctgOpUpdateTbMeta(SCtgCacheOperation *operation) {
 _return:
 
   taosMemoryFreeClear(pMeta->tbMeta);
+  taosMemoryFreeClear(pMeta->vctbMeta);
   taosMemoryFreeClear(pMeta);
 
   taosMemoryFreeClear(msg);

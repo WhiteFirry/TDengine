@@ -78,24 +78,6 @@ class TDTestCase(TBase):
 
         tdLog.info(f"prepare virtual normal table.")
 
-        tdSql.execute(f"CREATE VTABLE `vtb_virtual_ntb_fuck` ("
-                      "ts timestamp, "
-                      "u_tinyint_col tinyint unsigned from vtb_org_normal_0.u_tinyint_col, "
-                      "u_smallint_col smallint unsigned from vtb_org_normal_1.u_smallint_col, "
-                      "u_int_col int unsigned from vtb_org_normal_2.u_int_col, "
-                      "u_bigint_col bigint unsigned, "
-                      "tinyint_col tinyint, "
-                      "smallint_col smallint, "
-                      "int_col int, "
-                      "bigint_col bigint, "
-                      "float_col float, "
-                      "double_col double, "
-                      "bool_col bool, "
-                      "binary_16_col binary(16),"
-                      "binary_32_col binary(32),"
-                      "nchar_16_col nchar(16),"
-                      "nchar_32_col nchar(32))")
-
         tdSql.execute(f"CREATE VTABLE `vtb_virtual_ntb_full` ("
                       "ts timestamp, "
                       "u_tinyint_col tinyint unsigned from vtb_org_normal_0.u_tinyint_col, "
