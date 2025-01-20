@@ -3606,7 +3606,7 @@ int32_t ctgGetTbMetasFromCache(SCatalog *pCtg, SRequestConnInfo *pConn, SCtgTbMe
       CTG_ERR_RET(terrno);
     }
 
-    if (tbMeta->colRef != NULL) {
+    if (hasRefCol(tbMeta->tableType) && tbMeta->colRef != NULL) {
       colRefSize = tbMeta->numOfColRefs * sizeof(SColRef);
     }
 
