@@ -1507,6 +1507,8 @@ static int32_t metaHandleVirtualChildTableCreate(SMeta *pMeta, const SMetaEntry 
   } else {
     metaErr(TD_VID(pMeta->pVnode), code);
   }
+
+  metaFetchEntryFree(&pSuperEntry);
   return code;
 }
 
@@ -1854,18 +1856,6 @@ static int32_t metaHandleVirtualChildTableDrop(SMeta *pMeta, const SMetaEntry *p
     return code;
   }
 
-#if 0
-  if (tbUids) {
-    if (taosArrayPush(tbUids, &uid) == NULL) {
-      rc = terrno;
-      goto _exit;
-    }
-  }
-
-  if ((type == TSDB_CHILD_TABLE) && tbUid) {
-    *tbUid = uid;
-  }
-#endif
   metaFetchEntryFree(&pChild);
   metaFetchEntryFree(&pSuper);
   return code;

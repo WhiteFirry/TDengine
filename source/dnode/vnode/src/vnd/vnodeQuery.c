@@ -219,6 +219,7 @@ int32_t vnodeGetTableMeta(SVnode *pVnode, SRpcMsg *pMsg, bool direct) {
   }
 
 _exit:
+  taosMemoryFree(metaRsp.pColRefs);
   taosMemoryFree(metaRsp.pSchemas);
   taosMemoryFree(metaRsp.pSchemaExt);
 _exit2:
