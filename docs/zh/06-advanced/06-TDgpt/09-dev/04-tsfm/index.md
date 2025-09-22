@@ -50,7 +50,7 @@ pip install torch==2.3.1 -f https://download.pytorch.org/whl/torch_stable.html
 
 ## 设置时序基础模型服务地址
 
-TDgpt 安装根目录下的 `./lib/taosanalytics/time-moe.py` 文件 (3.3.6.4 以后版本使用 ./lib/taosanalytics/tsfmservice/timemoe-service.py) 负责 Time-MoE 模型的部署和服务，
+TDgpt 安装根目录下的 `./lib/taosanalytics/time-moe.py` 文件 (3.3.6.4 以后版本使用 ./lib/taosanalytics/tsfmservice/timemoe-server.py) 负责 Time-MoE 模型的部署和服务，
 修改文件设置合适的服务 URL。
 
 ```python
